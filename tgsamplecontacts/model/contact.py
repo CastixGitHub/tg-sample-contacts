@@ -13,5 +13,5 @@ class Contact(DeclarativeBase):
     # As it's a 1:1 relationship, the number may also be added here
     numbers = relationship('Number', uselist=False)
 
-    user_id = Column(Integer, ForeignKey('tg_user.user_id'))
+    user_id = Column(Integer, ForeignKey('tg_user.user_id'), nullable=False)
     user = relationship('User')

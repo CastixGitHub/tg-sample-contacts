@@ -47,6 +47,7 @@ def bootstrap(command, conf, vars):
         c1 = model.Contact()
         c1.first_name = 'John'
         c1.last_name = 'Doe'
+        c1.user = u
 
         model.DBSession.add(c1)
 

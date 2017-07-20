@@ -9,5 +9,5 @@ class Number(DeclarativeBase):
 
     id = Column(Integer, primary_key=True)
     number = Column(String(20), nullable=False)
-    contact_id = Column(Integer, ForeignKey('contacts.id'))
+    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
     contact = relationship("Contact", back_populates='numbers')
