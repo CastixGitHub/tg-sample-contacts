@@ -83,6 +83,12 @@ class RootController(BaseController):
             DBSession.delete(contact)
         redirect('/')
 
+    @expose('json')
+    def export(self):
+        contacts = DBSession.query(Contact).\
+                filter_by(user_id=get_user_id()).all()
+        return {'contacts': contacts, 'user_id': get_user_id()}
+
     @expose('tgsamplecontacts.templates.login')
     def login(self, came_from=lurl('/'), failure=None, login=''):
         """Start the user login."""
