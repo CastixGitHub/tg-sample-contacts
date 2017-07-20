@@ -11,17 +11,12 @@
             You can return to the <a href="/">FrontPage</a>.
         </div>
 
-	<a href="/new_contact">new</a>
-
-	<div py:for="contact in contacts">
-	    <div class="contact">
-		<span>${contact.first_name} ${contact.last_name}</span>
-		<span>${contact.numbers.number}</span>
-		<a href="/delete_contact?contact_id=${contact.id}">delete</a>
-	    </div>
-	</div>
-	
-	<a href="/json">export</a>
+	<form action="add_contact" method="post">
+	    <input name="first_name"/>
+	    <input name="last_name"/>
+	    <input name="number"/>
+	    <input type="submit"/>
+	</form>
     </div>
 </body>
 </html>

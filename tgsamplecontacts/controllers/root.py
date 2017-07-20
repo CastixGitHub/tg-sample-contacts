@@ -7,19 +7,21 @@ from tg.i18n import ugettext as _
 from tg.exceptions import HTTPFound
 from tgsamplecontacts import model
 from tgsamplecontacts.controllers.secure import SecureController
-from tgsamplecontacts.model import DBSession
+from tgsamplecontacts.model import DBSession, User, Contact, Number
 from tgext.admin.tgadminconfig import BootstrapTGAdminConfig as TGAdminConfig
 from tgext.admin.controller import AdminController
 
 from tgsamplecontacts.lib.base import BaseController
 from tgsamplecontacts.controllers.error import ErrorController
-from tgsamplecontacts.model.contact import Contact
 
 __all__ = ['RootController']
 
 
 def get_user_id():
-    return request.identity['user'].user_id
+    try:
+        return request.identity['user'].user_id
+    except:
+        return None
 
 
 class RootController(BaseController):
@@ -50,6 +52,36 @@ class RootController(BaseController):
         user_id = get_user_id()
         contacts = DBSession.query(Contact).filter_by(user_id=user_id).all()
         return dict(page='contacts', contacts=contacts)
+
+    @expose('tgsamplecontacts.templates.new_contact')
+    def new_contact(self):
+        """render the page with the form for adding a new user"""
+        return dict(page='new_contact')
+
+    @expose()
+    def add_contact(self, first_name, last_name, number):
+        contact = Contact()
+        contact.first_name = first_name
+        contact.last_name = last_name
+        user = DBSession.query(User).filter_by(user_id=get_user_id()).one()
+        contact.user = user
+        n = Number()
+        n.number = number
+        n.contact = contact
+
+        DBSession.add(n)
+        DBSession.add(contact)
+        redirect('/')
+
+    @expose()
+    def delete_contact(self, contact_id):
+        """Deletes a single contact"""
+        contact = DBSession.query(Contact).filter_by(id=contact_id).one()
+        if contact.user_id == get_user_id():
+            DBSession.query(model.Number).filter_by(contact_id=contact.id).\
+                    delete()
+            DBSession.delete(contact)
+        redirect('/')
 
     @expose('tgsamplecontacts.templates.login')
     def login(self, came_from=lurl('/'), failure=None, login=''):
