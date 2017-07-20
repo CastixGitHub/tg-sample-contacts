@@ -8,6 +8,8 @@ from tgsamplecontacts import model
 def bootstrap(command, conf, vars):
     """Place any commands to setup tgsamplecontacts here"""
 
+    print("bootstrapping")
+
     # <websetup.bootstrap.before.auth
     from sqlalchemy.exc import IntegrityError
     try:
@@ -41,6 +43,19 @@ def bootstrap(command, conf, vars):
         u1.password = 'editpass'
 
         model.DBSession.add(u1)
+
+        c1 = model.Contact()
+        c1.first_name = 'John'
+        c1.last_name = 'Doe'
+
+        model.DBSession.add(c1)
+
+        n1 = model.Number()
+        n1.number = '+391234567890'
+        n1.contact = c1
+
+        model.DBSession.add(n1)
+
         model.DBSession.flush()
         transaction.commit()
     except IntegrityError:

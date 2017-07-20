@@ -59,5 +59,7 @@ def init_model(engine):
 
 # Import your model modules here.
 from tgsamplecontacts.model.auth import User, Group, Permission
+from tgsamplecontacts.model.number import Number
+from tgsamplecontacts.model.contact import Contact
 
-__all__ = ('User', 'Group', 'Permission')
+__all__ = ('User', 'Group', 'Permission', 'Number', 'Contact')
