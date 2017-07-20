@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """Main Controller"""
 
-from tg import expose, flash, require, url, lurl
+from tg import expose, flash, lurl
 from tg import request, redirect, tmpl_context
-from tg.i18n import ugettext as _, lazy_ugettext as l_
+from tg.i18n import ugettext as _
 from tg.exceptions import HTTPFound
-from tg import predicates
 from tgsamplecontacts import model
 from tgsamplecontacts.controllers.secure import SecureController
 from tgsamplecontacts.model import DBSession
@@ -14,8 +13,13 @@ from tgext.admin.controller import AdminController
 
 from tgsamplecontacts.lib.base import BaseController
 from tgsamplecontacts.controllers.error import ErrorController
+from tgsamplecontacts.model.contact import Contact
 
 __all__ = ['RootController']
+
+
+def get_user_id():
+    return request.identity['user'].user_id
 
 
 class RootController(BaseController):
@@ -40,39 +44,12 @@ class RootController(BaseController):
     def _before(self, *args, **kw):
         tmpl_context.project_name = "tgsamplecontacts"
 
-    @expose('tgsamplecontacts.templates.index')
+    @expose('tgsamplecontacts.templates.contacts')
     def index(self):
         """Handle the front-page."""
-        return dict(page='index')
-    @expose('tgsamplecontacts.templates.about')
-    def about(self):
-        """Handle the 'about' page."""
-        return dict(page='about')
-
-    @expose('tgsamplecontacts.templates.environ')
-    def environ(self):
-        """This method showcases TG's access to the wsgi environment."""
-        return dict(page='environ', environment=request.environ)
-
-    @expose('tgsamplecontacts.templates.data')
-    @expose('json')
-    def data(self, **kw):
-        """
-        This method showcases how you can use the same controller
-        for a data page and a display page.
-        """
-        return dict(page='data', params=kw)
-    @expose('tgsamplecontacts.templates.index')
-    @require(predicates.has_permission('manage', msg=l_('Only for managers')))
-    def manage_permission_only(self, **kw):
-        """Illustrate how a page for managers only works."""
-        return dict(page='managers stuff')
-
-    @expose('tgsamplecontacts.templates.index')
-    @require(predicates.is_user('editor', msg=l_('Only for the editor')))
-    def editor_user_only(self, **kw):
-        """Illustrate how a page exclusive for the editor works."""
-        return dict(page='editor stuff')
+        user_id = get_user_id()
+        contacts = DBSession.query(Contact).filter_by(user_id=user_id).all()
+        return dict(page='contacts', contacts=contacts)
 
     @expose('tgsamplecontacts.templates.login')
     def login(self, came_from=lurl('/'), failure=None, login=''):
