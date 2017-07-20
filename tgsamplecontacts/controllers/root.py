@@ -116,8 +116,7 @@ class RootController(BaseController):
             login_counter = request.environ.get('repoze.who.logins', 0) + 1
             redirect('/login',
                      params=dict(came_from=came_from, __logins=login_counter))
-        userid = request.identity['repoze.who.userid']
-        flash(_('Welcome back, %s!') % userid)
+        flash(_('Welcome back, %s!') % request.identity['user'].user_name)
 
         # Do not use tg.redirect with tg.url as it will add the mountpoint
         # of the application twice.

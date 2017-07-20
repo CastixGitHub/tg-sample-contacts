@@ -9,6 +9,7 @@ from tg.configuration import AppConfig
 
 import tgsamplecontacts
 from tgsamplecontacts import model, lib
+from sqlalchemy import or_
 
 base_config = AppConfig()
 base_config.renderers = []
@@ -61,9 +62,9 @@ class ApplicationAuthMetadata(TGAuthMetadata):
 
     def authenticate(self, environ, identity):
         login = identity['login']
-        user = self.sa_auth.dbsession.query(self.sa_auth.user_class).filter_by(
-            user_name=login
-        ).first()
+        user = self.sa_auth.dbsession.query(self.sa_auth.user_class).filter(
+                or_(self.sa_auth.user_class.user_name == login,
+                    self.sa_auth.user_class.email_address == login)).first()
 
         if not user:
             login = None
@@ -94,9 +95,9 @@ class ApplicationAuthMetadata(TGAuthMetadata):
         return login
 
     def get_user(self, identity, userid):
-        return self.sa_auth.dbsession.query(self.sa_auth.user_class).filter_by(
-            user_name=userid
-        ).first()
+        return self.sa_auth.dbsession.query(self.sa_auth.user_class).filter(
+            or_(self.sa_auth.user_class.user_name == userid,
+                self.sa_auth.user_class.email_address == userid)).first()
 
     def get_groups(self, identity, userid):
         return [g.group_name for g in identity['user'].groups]
