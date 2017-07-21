@@ -142,5 +142,5 @@ try:
 except ImportError:
     pass
 
-# plug(base_config, 'registration')
+plug(base_config, 'registration')
 plug(base_config, 'tgext.mailer')

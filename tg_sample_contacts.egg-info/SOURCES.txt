@@ -25,6 +25,8 @@ tgsamplecontacts/lib/base.py
 tgsamplecontacts/lib/helpers.py
 tgsamplecontacts/model/__init__.py
 tgsamplecontacts/model/auth.py
+tgsamplecontacts/model/contact.py
+tgsamplecontacts/model/number.py
 tgsamplecontacts/public/favicon.ico
 tgsamplecontacts/public/css/bootstrap.min.css
 tgsamplecontacts/public/css/style.css
@@ -38,12 +40,15 @@ tgsamplecontacts/public/img/under_the_hood_blue.png
 tgsamplecontacts/public/javascript/bootstrap.min.js
 tgsamplecontacts/templates/__init__.py
 tgsamplecontacts/templates/about.xhtml
+tgsamplecontacts/templates/contacts.xhtml
 tgsamplecontacts/templates/data.xhtml
 tgsamplecontacts/templates/environ.xhtml
 tgsamplecontacts/templates/error.xhtml
+tgsamplecontacts/templates/form_error.xhtml
 tgsamplecontacts/templates/index.xhtml
 tgsamplecontacts/templates/login.xhtml
 tgsamplecontacts/templates/master.xhtml
+tgsamplecontacts/templates/new_contact.xhtml
 tgsamplecontacts/templates/template.xhtml.template
 tgsamplecontacts/templates/__pycache__/__init__.cpython-36.pyc
 tgsamplecontacts/tests/__init__.py
