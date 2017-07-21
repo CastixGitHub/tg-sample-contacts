@@ -10,6 +10,7 @@ from tg.configuration import AppConfig
 import tgsamplecontacts
 from tgsamplecontacts import model, lib
 from sqlalchemy import or_
+from tgext.pluggable import plug
 
 base_config = AppConfig()
 base_config.renderers = []
@@ -140,3 +141,6 @@ try:
     enable_debugbar(base_config)
 except ImportError:
     pass
+
+# plug(base_config, 'registration')
+plug(base_config, 'tgext.mailer')

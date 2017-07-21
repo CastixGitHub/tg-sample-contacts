@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Error controller"""
+import tg
 from tg import request, expose
 from tgsamplecontacts.lib.base import BaseController
 
@@ -32,7 +33,13 @@ class ErrorController(BaseController):
             message = ("<p>We're sorry but we weren't able to process "
                        " this request.</p>")
 
-        values = dict(prefix=request.environ.get('SCRIPT_NAME', ''),
+        errors = [{e[0]: e[1].args[0]}
+                  for e in tg.tmpl_context.form_errors.items()]
+        values = tg.tmpl_context.form_values
+
+        result = dict(prefix=request.environ.get('SCRIPT_NAME', ''),
                       code=request.params.get('code', resp.status_int),
-                      message=request.params.get('message', message))
-        return values
+                      message=request.params.get('message', message),
+                      errors=errors,
+                      values=values)
+        return result

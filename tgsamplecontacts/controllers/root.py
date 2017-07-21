@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Main Controller"""
 
-from tg import expose, flash, lurl
+import tg
+from tg import expose, flash, lurl, validate
 from tg import request, redirect, tmpl_context
 from tg.i18n import ugettext as _
 from tg.exceptions import HTTPFound
@@ -13,6 +14,7 @@ from tgext.admin.controller import AdminController
 
 from tgsamplecontacts.lib.base import BaseController
 from tgsamplecontacts.controllers.error import ErrorController
+from formencode import validators
 
 __all__ = ['RootController']
 
@@ -46,6 +48,23 @@ class RootController(BaseController):
     def _before(self, *args, **kw):
         tmpl_context.project_name = "tgsamplecontacts"
 
+    @expose('json')
+    def form_error_handler(self, **kwarg):
+        errors = [{e[0]: e[1].args[0]}
+                  for e in tg.tmpl_context.form_errors.items()]
+        values = tg.tmpl_context.form_values
+        print("errors: " + str(errors))
+        print("values: " + str(values))
+        return dict({'errors': errors, 'values': values})
+
+    @expose('tgsamplecontacts.templates.form_error')
+    def form_error(self, **kwargs):
+        errors = [{e[0]: e[1].args[0]}
+                  for e in tg.tmpl_context.form_errors.items()]
+        values = tg.tmpl_context.form_values
+
+        return dict(errors=errors, values=values)
+
     @expose('tgsamplecontacts.templates.contacts')
     def index(self):
         """Handle the front-page."""
@@ -59,6 +78,12 @@ class RootController(BaseController):
         return dict(page='new_contact')
 
     @expose()
+    @validate(validators={'first_name': validators.String(max=80,
+                                                          not_empty=True),
+                          'last_name': validators.String(max=80),
+                          'number': validators.Regex(r'^\+?[-0-9 ]{10,}$',
+                                                     not_empty=True)},
+              error_handler=form_error)
     def add_contact(self, first_name, last_name, number):
         contact = Contact()
         contact.first_name = first_name
