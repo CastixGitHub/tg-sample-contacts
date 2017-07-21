@@ -48,15 +48,6 @@ class RootController(BaseController):
     def _before(self, *args, **kw):
         tmpl_context.project_name = "tgsamplecontacts"
 
-    @expose('json')
-    def form_error_handler(self, **kwarg):
-        errors = [{e[0]: e[1].args[0]}
-                  for e in tg.tmpl_context.form_errors.items()]
-        values = tg.tmpl_context.form_values
-        print("errors: " + str(errors))
-        print("values: " + str(values))
-        return dict({'errors': errors, 'values': values})
-
     @expose('tgsamplecontacts.templates.form_error')
     def form_error(self, **kwargs):
         errors = [{e[0]: e[1].args[0]}
