@@ -66,15 +66,14 @@ class RootController(BaseController):
     @expose('tgsamplecontacts.templates.new_contact')
     def new_contact(self):
         """render the page with the form for adding a new user"""
-        return dict(page='new_contact')
+        return dict(page='New contact')
 
     @expose()
-    @validate(validators={'first_name': validators.String(max=80,
-                                                          not_empty=True),
-                          'last_name': validators.String(max=80),
-                          'number': validators.Regex(r'^\+?[-0-9 ]{10,}$',
-                                                     not_empty=True)},
-              error_handler=form_error)
+    @validate(validators=dict(
+        {'first_name': validators.String(max=80, not_empty=True),
+         'last_name': validators.String(max=80),
+         'number': validators.Regex(r'^\+?[-0-9 ]{10,20}$', not_empty=True)}),
+        error_handler=form_error)
     def add_contact(self, first_name, last_name, number):
         contact = Contact()
         contact.first_name = first_name

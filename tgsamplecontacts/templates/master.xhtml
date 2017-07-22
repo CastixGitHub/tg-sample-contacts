@@ -30,10 +30,9 @@
 
     <div class="collapse navbar-collapse" id="navbar-content">
       <ul class="nav navbar-nav">
-        <li class="${('', 'active')[self.defined('page') and page=='index']}"><a href="${tg.url('/')}">Welcome</a></li>
-        <li class="${('', 'active')[self.defined('page') and page=='about']}"><a href="${tg.url('/about')}">About</a></li>
-        <li class="${('', 'active')[self.defined('page') and page=='data']}"><a href="${tg.url('/data')}">Serving Data</a></li>
-        <li class="${('', 'active')[self.defined('page') and page=='environ']}"><a href="${tg.url('/environ')}">WSGI Environment</a></li>
+        <li class="${('', 'active')[self.defined('page') and page=='index']}"><a href="${tg.url('/')}">Contacts</a></li>
+        <li class="${('', 'active')[self.defined('page') and page=='new contact']}"><a href="${tg.url('/new_contact')}">New contact</a></li>
+        <li class="${('', 'active')[self.defined('page') and page=='export']}"><a href="${tg.url('/export.json')}">Export</a></li>
       </ul>
       <ul py:if="tg.auth_stack_enabled" class="nav navbar-nav navbar-right">
         <li py:if="not request.identity"><a href="${tg.url('/login')}">Login</a></li>
@@ -66,5 +65,14 @@
 
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="${tg.url('/javascript/bootstrap.min.js')}"></script>
+  <script>
+	$(document).ready(function() {
+	    $('form[action="delete_contact"]').submit(function(e) {
+	        if(!confirm('Do you really want to delete the contact?')) {
+	            e.preventDefault();
+	        }
+	    });
+	});
+  </script>
 </body>
 </html>

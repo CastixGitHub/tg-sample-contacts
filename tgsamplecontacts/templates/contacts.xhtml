@@ -5,23 +5,18 @@
 
 <body py:block="body" py:strip="True">
     <div class="main_content">
-        <div style="float:right; width: 10em;"> Viewing
-            <span py:replace="page">Page Name Goes Here</span>
-            <br/>
-            You can return to the <a href="/">FrontPage</a>.
-        </div>
-
-	<a href="/new_contact">new</a>
-
-	<div py:for="contact in contacts">
-	    <div class="contact">
-		<span>${contact.first_name} ${contact.last_name}</span>
-		<span>${contact.numbers.number}</span>
-		<a href="/delete_contact?contact_id=${contact.id}">delete</a>
+	<py:if test="contacts">
+	    <div py:for="contact in contacts" class="container">
+	        <form action="delete_contact" class="row">
+		    <span class="col-sm-6 col-xs-12" style="text-align: center">${contact.first_name} ${contact.last_name}</span>
+		    <span class="col-sm-4 col-xs-12" style="text-align: center">${contact.numbers.number}</span>
+		    <button name="contact_id" value="${contact.id}" class="btn btn-default col-sm-2 col-xs-12">Delete</button>
+	        </form>
+		<br/>
 	    </div>
-	</div>
-	
-	<a href="/export.json">export</a>
+	</py:if><py:else>
+	    <span>Empty, create a new contact</span>
+	</py:else>
     </div>
 </body>
 </html>
