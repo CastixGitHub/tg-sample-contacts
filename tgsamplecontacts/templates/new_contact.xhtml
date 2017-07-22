@@ -5,21 +5,25 @@
 
 <body py:block="body" py:strip="True">
     <div class="main_content">
-	<form action="add_contact" method="post">
-	    <div class="form-group">
-		<label for="first_name">First name</label>
-		<input name="first_name" class="form-control" id="first_name" placeholder="John" required=""/>
-	    </div>
-	    <div class="form-group">
-		<label for="last_name">Last name</label>
-	        <input name="last_name" class="form-control" id="last_name" placeholder="Doe" required=""/>
-	    </div>
-	    <div class="form-group">
-		<label for="number">Number</label>
-	    	<input name="number" class="form-control" id="number" placeholder="+39333123098" required=""/>
-	    </div>
-	    <input type="submit" class="btn btn-default"/>
-	</form>
+	<py:if test="logged">
+	    <form action="add_contact" method="post">
+			<div class="form-group">
+			<label for="first_name">First name</label>
+			<input name="first_name" class="form-control" id="first_name" placeholder="John" required=""/>
+			</div>
+			<div class="form-group">
+				<label for="last_name">Last name</label>
+				<input name="last_name" class="form-control" id="last_name" placeholder="Doe" required=""/>
+			</div>
+			<div class="form-group">
+				<label for="number">Number</label>
+				<input name="number" class="form-control" id="number" placeholder="+39333123098" required=""/>
+			</div>
+			<input type="submit" class="btn btn-default"/>
+		</form>
+	</py:if><py:else>
+		<span>Log in or register before</span>
+	</py:else>
     </div>
 </body>
 </html>

@@ -66,7 +66,8 @@ class RootController(BaseController):
     @expose('tgsamplecontacts.templates.new_contact')
     def new_contact(self):
         """render the page with the form for adding a new user"""
-        return dict(page='New contact')
+        logged = False if get_user_id() is None else True
+        return dict(page='New contact', logged=logged)
 
     @expose()
     @validate(validators=dict(
